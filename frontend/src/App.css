@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+input {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
