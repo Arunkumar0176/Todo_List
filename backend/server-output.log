@@ -1,0 +1,50 @@
+🚀 Server running on port 3001
+Test URL: http://localhost:3001/api/auth/test
+Health check: http://localhost:3001/api/health
+✅ MongoDB connected successfully
+📊 Database: todolist
+🔗 Connection state: Connected
+
+ ========== SIGNUP ATTEMPT ==========
+ Received data: { name: 'arun', email: 'arun@gmail.com', password: '***' }
+ Checking if user already exists...
+ Email is available
+ Creating new user document...
+ Saving user to MongoDB...
+ MongoDB connection state: Connected
+ Attempting to save user to MongoDB...
+ Password hashing error: TypeError: next is not a function
+    at model.<anonymous> (/Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:16:5)
+    at async Kareem.execPre (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/kareem/index.js:65:24)
+    at async model.$__save (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/mongoose/lib/model.js:369:5)
+    at async model.save (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/mongoose/lib/model.js:609:5)
+    at async /Users/arun/Desktop/MERN/Todo_list/backend/routes/auth.js:71:19
+ ========== SAVE ERROR ==========
+ Error saving user to MongoDB: TypeError: next is not a function
+    at model.<anonymous> (/Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:19:5)
+    at async Kareem.execPre (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/kareem/index.js:65:24)
+    at async model.$__save (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/mongoose/lib/model.js:369:5)
+    at async model.save (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/mongoose/lib/model.js:609:5)
+    at async /Users/arun/Desktop/MERN/Todo_list/backend/routes/auth.js:71:19
+ Save error details: {
+  name: 'TypeError',
+  message: 'next is not a function',
+  code: undefined,
+  keyPattern: undefined,
+  keyValue: undefined,
+  errors: undefined
+}
+ =================================
+
+❌ ========== SIGNUP ERROR ==========
+Error message: next is not a function
+Error name: TypeError
+Error code: undefined
+Full error: TypeError: next is not a function
+    at model.<anonymous> (/Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:19:5)
+    at async Kareem.execPre (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/kareem/index.js:65:24)
+    at async model.$__save (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/mongoose/lib/model.js:369:5)
+    at async model.save (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/mongoose/lib/model.js:609:5)
+    at async /Users/arun/Desktop/MERN/Todo_list/backend/routes/auth.js:71:19
+=====================================
+

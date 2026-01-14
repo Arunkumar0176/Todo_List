@@ -7,7 +7,8 @@ function Signup() {
   const submit = async () => {
     try {
       await API.post("/auth/signup", form);
-      alert("Signup successful");
+      alert("Signup successful! Please login.");
+      window.location.href = "/";
     } catch (error) {
       console.error(error);
       alert("Error: " + (error.response?.data?.message || "Something went wrong"));

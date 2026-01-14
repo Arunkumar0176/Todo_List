@@ -5,9 +5,16 @@ function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
 
   const submit = async () => {
-    const res = await API.post("/auth/login", form);
-    localStorage.setItem("token", res.data.token);
-    alert("Login successful");
+    try {
+      const res = await API.post("/auth/login", form);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      alert("Login successful");
+      window.location.href = "/home";
+    } catch (error) {
+      console.error(error);
+      alert("Error: " + (error.response?.data?.message || "Invalid credentials"));
+    }
   };
 
   return (
