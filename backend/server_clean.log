@@ -1,0 +1,26 @@
+✅ MongoDB connected successfully
+📊 Database: todolist
+🔗 Connection state: Connected
+ Server running on port 3001
+Test URL: http://localhost:3001/api/auth/test
+Health check: http://localhost:3001/api/health
+✅ Admin logged in: arun (arun@gmail.com) - Role: admin
+📝 Signup request: {
+  name: 'Test Admin',
+  email: 'testadmin@test.com',
+  employeeId: 'ARUN12345'
+}
+🔑 Employee ID provided: ARUN12345
+✅ Valid employee ID - Creating ADMIN account
+✅ User saved - Role: admin
+/Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:18
+    next();
+    ^
+
+TypeError: next is not a function
+    at /Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:18:5
+    at /Users/arun/Desktop/MERN/Todo_list/backend/node_modules/bcryptjs/umd/index.js:1177:18
+    at Immediate.next (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/bcryptjs/umd/index.js:1066:13)
+    at process.processImmediate (node:internal/timers:491:21)
+
+Node.js v22.12.0

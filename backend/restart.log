@@ -1,0 +1,6 @@
+✅ MongoDB connected successfully
+📊 Database: todolist
+🔗 Connection state: Connected
+ Server running on port 3001
+Test URL: http://localhost:3001/api/auth/test
+Health check: http://localhost:3001/api/health

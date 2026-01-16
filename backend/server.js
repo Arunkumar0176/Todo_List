@@ -1,9 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+// Clear require cache for models
+delete require.cache[require.resolve('./models/User')];
+delete require.cache[require.resolve('./routes/auth')];
+
 const authRoutes = require('./routes/auth');
 const todoRoutes = require('./routes/todos');
 const userRoutes = require('./routes/users');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -17,12 +23,12 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
     });
-    console.log('✅ MongoDB connected successfully');
-    console.log('📊 Database:', mongoose.connection.name);
-    console.log('🔗 Connection state:', mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected');
+    console.log(' MongoDB connected successfully');
+    console.log(' Database:', mongoose.connection.name);
+    console.log(' Connection state:', mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected');
   } catch (err) {
-    console.error('❌ MongoDB connection error:', err.message);
-    console.error('❌ Full error:', err);
+    console.error(' MongoDB connection error:', err.message);
+    console.error(' Full error:', err);
     process.exit(1);
   }
 };
@@ -33,6 +39,7 @@ connectDB().then(() => {
   app.use('/api/auth', authRoutes);
   app.use('/api/todos', todoRoutes);
   app.use('/api/users', userRoutes);
+  app.use('/api/admin', adminRoutes);
   
   // Health check route
   app.get('/api/health', (req, res) => {

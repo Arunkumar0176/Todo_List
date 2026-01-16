@@ -7,10 +7,21 @@ function Login() {
   const submit = async () => {
     try {
       const res = await API.post("/auth/login", form);
+      console.log('Login response:', res.data);
+      console.log('User role:', res.data.user.role);
+      
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       alert("Login successful");
-      window.location.href = "/home";
+      
+      // Redirect based on role
+      if (res.data.user.role === 'admin') {
+        console.log('Redirecting to admin page');
+        window.location.href = "/admin";
+      } else {
+        console.log('Redirecting to home page');
+        window.location.href = "/home";
+      }
     } catch (error) {
       console.error(error);
       alert("Error: " + (error.response?.data?.message || "Invalid credentials"));

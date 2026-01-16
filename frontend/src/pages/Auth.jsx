@@ -15,10 +15,26 @@ function Auth() {
           email: form.email, 
           password: form.password 
         });
+        
+        console.log('=== LOGIN DEBUG ===');
+        console.log('Full response:', res.data);
+        console.log('User object:', res.data.user);
+        console.log('User role:', res.data.user.role);
+        console.log('Role type:', typeof res.data.user.role);
+        console.log('Is admin?', res.data.user.role === 'admin');
+        console.log('==================');
+        
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        alert("Login successful!");
-        window.location.href = "/home";
+        
+        // Role-based redirect
+        if (res.data.user.role === 'admin') {
+          alert("Admin login successful!");
+          window.location.replace("/admin");
+        } else {
+          alert("Login successful!");
+          window.location.replace("/home");
+        }
       } else {
         const res = await API.post("/auth/signup", form);
         localStorage.setItem("token", res.data.token);
@@ -99,6 +115,17 @@ function Auth() {
           {isLogin ? "Sign Up" : "Login"}
         </button>
       </p>
+
+      {isLogin && (
+        <p style={{ textAlign: "center", marginTop: "10px" }}>
+          <button 
+            onClick={() => window.location.href = "/admin-signup"}
+            style={{ background: "none", border: "none", color: "#28a745", cursor: "pointer", textDecoration: "underline" }}
+          >
+            Create Admin Account
+          </button>
+        </p>
+      )}
     </div>
   );
 }

@@ -8,21 +8,21 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' }
 });
 
-// Hash password before saving
-userSchema.pre('save', async function() {
-  if (!this.isModified('password')) return;
+userSchema.pre('save', async function(next) {
+  const user = this;
+  if (!user.isModified('password')) return next();
+  
   try {
-    this.password = await bcrypt.hash(this.password, 10);
-  } catch (error) {
-    console.error(' Password hashing error:', error);
-    throw error;
+    const hash = await bcrypt.hash(user.password, 10);
+    user.password = hash;
+    next();
+  } catch (err) {
+    next(err);
   }
 });
 
-// Compare password method
-userSchema.methods.comparePassword = async function(candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = function(candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
-

@@ -6,9 +6,22 @@ function Signup() {
 
   const submit = async () => {
     try {
-      await API.post("/auth/signup", form);
-      alert("Signup successful! Please login.");
-      window.location.href = "/";
+      const res = await API.post("/auth/signup", form);
+      console.log('Signup response:', res.data);
+      console.log('User role:', res.data.user.role);
+      
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      alert("Signup successful!");
+      
+      // Redirect based on role
+      if (res.data.user.role === 'admin') {
+        console.log('Redirecting to admin page');
+        window.location.href = "/admin";
+      } else {
+        console.log('Redirecting to home page');
+        window.location.href = "/home";
+      }
     } catch (error) {
       console.error(error);
       alert("Error: " + (error.response?.data?.message || "Something went wrong"));

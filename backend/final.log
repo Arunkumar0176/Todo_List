@@ -1,0 +1,30 @@
+✅ MongoDB connected successfully
+📊 Database: todolist
+🔗 Connection state: Connected
+ Server running on port 3001
+Test URL: http://localhost:3001/api/auth/test
+Health check: http://localhost:3001/api/health
+✅ User logged in: Arun kumar (arun5@gmail.com) - Role: user
+
+ Fetching todos for user: 6969fed0afa22aafffbfeaaf
+ Found 0 todos for user 6969fed0afa22aafffbfeaaf
+📝 Signup request: {
+  name: 'arun kumar',
+  email: 'arun@gmail.com',
+  employeeId: 'ARUN12345'
+}
+📝 Signup request: { name: 'ARUN', email: 'arun6@gmail.com', employeeId: 'ARUN12345' }
+🔑 Employee ID provided: ARUN12345
+✅ Valid employee ID - Creating ADMIN account
+✅ User saved - Role: admin
+/Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:18
+    done();
+    ^
+
+TypeError: done is not a function
+    at /Users/arun/Desktop/MERN/Todo_list/backend/models/User.js:18:5
+    at /Users/arun/Desktop/MERN/Todo_list/backend/node_modules/bcryptjs/umd/index.js:1177:18
+    at Immediate.next (/Users/arun/Desktop/MERN/Todo_list/backend/node_modules/bcryptjs/umd/index.js:1066:13)
+    at process.processImmediate (node:internal/timers:491:21)
+
+Node.js v22.12.0

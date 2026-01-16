@@ -27,5 +27,5 @@ app.post('/test', testMiddleware, (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log('🚀 Test server running on port 3001');
+  console.log(' Test server running on port 3001');
 });

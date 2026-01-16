@@ -16,3 +16,6 @@ const checkDBConnection = (req, res, next) => {
 };
 
 module.exports = { checkDBConnection };
+
+
+//./mongod --dbpath /Users/arun/Downloads/db
