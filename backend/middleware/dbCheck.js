@@ -1,21 +1,52 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
-const checkDBConnection = (req, res, next) => {
-  try {
-    if (mongoose.connection.readyState !== 1) {
-      console.error('Database not connected. State:', mongoose.connection.readyState);
-      return res.status(503).json({ 
-        message: 'Database connection not available. Please try again later.' 
-      });
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user"
     }
-    next();
-  } catch (error) {
-    console.error(' Error in checkDBConnection:', error);
-    return res.status(500).json({ message: 'Middleware error: ' + error.message });
-  }
+  },
+  { timestamps: true }
+);
+
+/**
+ * 🔐 Password Hashing (FIXED)
+ * ✔ async WITHOUT next()
+ */
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+/**
+ * 🔑 Password Compare Method (for login)
+ */
+UserSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = { checkDBConnection };
+module.exports = mongoose.model("User", UserSchema);
 
 
 //./mongod --dbpath /Users/arun/Downloads/db

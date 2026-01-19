@@ -11,50 +11,38 @@ router.get('/test', (req, res) => {
   res.json({ message: 'API is working!' });
 });
 
-// Check database connection for signup and login routes
+// Signup route
 router.post('/signup', async (req, res) => {
-  if (mongoose.connection.readyState !== 1) {
-    return res.status(503).json({ message: 'Database not connected' });
-  }
   try {
+    console.log('\n ========== SIGNUP ATTEMPT ==========');
+    
+    // Check database connection
+    if (mongoose.connection.readyState !== 1) {
+      console.error(' Database not connected');
+      return res.status(503).json({ message: 'Database not connected' });
+    }
+    
     const { name, email, password, employeeId } = req.body;
     
-    console.log('📝 Signup request:', { name, email, employeeId: employeeId || 'NOT PROVIDED' });
-    
+    // Validate input
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: 'Invalid email format' });
+      return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
     
+    // Check if user exists
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email' });
+      return res.status(400).json({ message: 'User already exists' });
     }
     
-    const ADMIN_EMPLOYEE_ID = 'ARUN12345';
-    let userRole = 'user';
+    // Determine role
+    const userRole = (employeeId === 'ARUN12345') ? 'admin' : 'user';
     
-    // Check if employeeId provided for admin account
-    if (employeeId) {
-      console.log('🔑 Employee ID provided:', employeeId);
-      if (employeeId !== ADMIN_EMPLOYEE_ID) {
-        console.log('❌ Invalid employee ID');
-        return res.status(400).json({ message: 'Invalid employee ID' });
-      }
-      userRole = 'admin';
-      console.log('✅ Valid employee ID - Creating ADMIN account');
-    } else {
-      console.log('👤 No employee ID - Creating USER account');
-    }
-    
+    // Create user
     const user = new User({ 
       name: name.trim(), 
       email: email.toLowerCase().trim(), 
@@ -62,41 +50,54 @@ router.post('/signup', async (req, res) => {
       role: userRole
     });
     
+    // Save user
     await user.save();
-    console.log('✅ User saved - Role:', user.role);
+    console.log('✅ User saved:', user.email);
     
+    // Generate token
     const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role },
+      { userId: user._id.toString(), email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
 
+    console.log('✅ Signup successful\n');
     res.status(201).json({ 
-      message: `${userRole === 'admin' ? 'Admin' : 'User'} created successfully`, 
+      message: 'User created successfully', 
       token,
       user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role }
     });
+    
   } catch (error) {
-    console.error('❌ Signup error:', error.message);
+    console.error('\n❌ SIGNUP ERROR:');
+    console.error('Message:', error.message);
+    console.error('Name:', error.name);
+    console.error('Code:', error.code);
+    
     if (error.code === 11000) {
       return res.status(400).json({ message: 'Email already exists' });
     }
-    res.status(500).json({ message: 'Server error' });
+    
+    res.status(500).json({ message: error.message || 'Server error' });
   }
 });
 
+// Login route
 router.post('/login', async (req, res) => {
-  if (mongoose.connection.readyState !== 1) {
-    return res.status(503).json({ message: 'Database not connected' });
-  }
   try {
+    console.log('\n🔐 ========== LOGIN ATTEMPT ==========');
+    
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ message: 'Database not connected' });
+    }
+    
     const { email, password } = req.body;
     
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
     
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -106,22 +107,22 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    console.log(`✅ ${user.role === 'admin' ? 'Admin' : 'User'} logged in: ${user.name} (${user.email}) - Role: ${user.role}`);
-
     const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role },
+      { userId: user._id.toString(), email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
 
+    console.log('✅ Login successful\n');
     res.json({ 
       message: 'Login successful', 
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+      user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role }
     });
   } catch (error) {
-    console.error('Login error:', error.message);
-    res.status(500).json({ message: 'Server error' });
+    console.error('\n❌ LOGIN ERROR:');
+    console.error('Message:', error.message);
+    res.status(500).json({ message: error.message || 'Server error' });
   }
 });
 
