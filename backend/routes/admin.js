@@ -7,7 +7,7 @@ const { checkRole } = require('../middleware/rbac');
 
 const router = express.Router();
 
-// Admin Employee ID (hardcoded for now)
+// Admin Employee ID 
 const ADMIN_EMPLOYEE_ID = 'ARUN12345';
 
 // Verify admin employee ID (public route)

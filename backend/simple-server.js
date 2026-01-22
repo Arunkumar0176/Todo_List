@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const app = express();
+const app = express(); 
 
 app.use(cors());
 app.use(express.json());
@@ -16,7 +16,7 @@ app.post('/signup', (req, res) => {
   console.log('Received:', req.body);
   res.json({ 
     message: 'Signup received!', 
-    data: req.body 
+    data: req.body
   });
 });
 

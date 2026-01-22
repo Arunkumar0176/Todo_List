@@ -39,7 +39,7 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
     
-    // Determine role
+    // Determine role based
     const userRole = (employeeId === 'ARUN12345') ? 'admin' : 'user';
     
     // Create user
@@ -52,7 +52,7 @@ router.post('/signup', async (req, res) => {
     
     // Save user
     await user.save();
-    console.log('✅ User saved:', user.email);
+    console.log('User saved:', user.email);
     
     // Generate token
     const token = jwt.sign(
@@ -61,7 +61,7 @@ router.post('/signup', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    console.log('✅ Signup successful\n');
+    console.log(' Signup successful\n');
     res.status(201).json({ 
       message: 'User created successfully', 
       token,
@@ -69,7 +69,7 @@ router.post('/signup', async (req, res) => {
     });
     
   } catch (error) {
-    console.error('\n❌ SIGNUP ERROR:');
+    console.error('\n SIGNUP ERROR:');
     console.error('Message:', error.message);
     console.error('Name:', error.name);
     console.error('Code:', error.code);
@@ -85,7 +85,7 @@ router.post('/signup', async (req, res) => {
 // Login route
 router.post('/login', async (req, res) => {
   try {
-    console.log('\n🔐 ========== LOGIN ATTEMPT ==========');
+    console.log('\n ========== LOGIN ATTEMPT ==========');
     
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ message: 'Database not connected' });
@@ -113,14 +113,14 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    console.log('✅ Login successful\n');
+    console.log(' Login successful\n');
     res.json({ 
       message: 'Login successful', 
       token,
       user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role }
     });
   } catch (error) {
-    console.error('\n❌ LOGIN ERROR:');
+    console.error('\n LOGIN ERROR:');
     console.error('Message:', error.message);
     res.status(500).json({ message: error.message || 'Server error' });
   }

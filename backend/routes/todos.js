@@ -20,7 +20,7 @@ router.use((req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     const userId = req.user.userId;
-    console.log(`\n Fetching todos for user: ${userId}`);
+    console.log(`\n Fetching todos for user: ${userId}`); //using userID find user Todo
     // Sort by createdAt ascending (oldest first, newest at bottom)
     const todos = await Todo.find({ user: userId }).sort({ createdAt: 1 });
     console.log(` Found ${todos.length} todos for user ${userId}`);
@@ -164,10 +164,10 @@ router.delete('/:id', async (req, res) => {
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
-    console.log(`✅ Todo deleted: ${todo._id}`);
+    console.log(` Todo deleted: ${todo._id}`);
     res.json({ message: 'Todo deleted successfully' });
   } catch (error) {
-    console.error('❌ Delete todo error:', error.message);
+    console.error(' Delete todo error:', error.message);
     res.status(500).json({ message: 'Server error' });
   }
 });
