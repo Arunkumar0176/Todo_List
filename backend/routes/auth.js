@@ -21,19 +21,19 @@ router.post('/signup', async (req, res) => {
       console.error(' Database not connected');
       return res.status(503).json({ message: 'Database not connected' });
     }
-    
+    //read data from req.body
     const { name, email, password, employeeId } = req.body;
     
-    // Validate input
+    // Validate input in form 
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
-
+    //check the length of password
     if (password.length < 6) {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
     
-    // Check if user exists
+    // Check if user exists, calls model
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
@@ -42,7 +42,7 @@ router.post('/signup', async (req, res) => {
     // Determine role based
     const userRole = (employeeId === 'ARUN12345') ? 'admin' : 'user';
     
-    // Create user
+    // Create user in model for new user
     const user = new User({ 
       name: name.trim(), 
       email: email.toLowerCase().trim(), 
@@ -54,7 +54,7 @@ router.post('/signup', async (req, res) => {
     await user.save();
     console.log('User saved:', user.email);
     
-    // Generate token
+    // Generate token for specific users
     const token = jwt.sign(
       { userId: user._id.toString(), email: user.email, role: user.role },
       JWT_SECRET,
